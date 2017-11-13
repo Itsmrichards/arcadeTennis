@@ -8,6 +8,8 @@ function Player:new ( obj )
 end
 
 function Player:spawn( x, y )
+	x = x or 0
+	y = y or 0
 	self.playerSprite = display.newImage( "kenney_sportspack/PNG/Green/characterGreen (1).png", x, y )
 	self.racketSprite = display.newImage( "kenney_sportspack/PNG/Equipment/racket_metal.png", x + 30, y - 15 )
 
