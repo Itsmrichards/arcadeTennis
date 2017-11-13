@@ -5,10 +5,11 @@ dataSheet.backgroundOptions =
 {
     frames = 
     {
-     	{ x = 0, y = 0, width = 64, height = 64 }, --bg1
-      	{ x = 64, y = 0, width = 64, height = 64 }, --bg1
-      	{ x = 64, y = 896, width = 64, height = 64 },
-      	{ x = 640, y = 64, width = 64, height = 64 }
+     	  { x = 0, y = 0, width = 64, height = 64 }, --bg1
+      	{ x = 64, y = 0, width = 64, height = 64 }, --bg2
+      	{ x = 64, y = 896, width = 64, height = 64 },--3
+      	{ x = 640, y = 64, width = 64, height = 64 },--4
+        { x = 415, y = 530, width = 3, height = 75} --5
   	}         
 
 }

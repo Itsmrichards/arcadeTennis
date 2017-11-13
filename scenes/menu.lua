@@ -8,7 +8,7 @@ local textGroup
 function scene:create( event )
    local sceneGroup = self.view
 
-  -- Commonly used coordinates
+   -- Commonly used coordinates
    local _W, _H, _CX, _CY = display.contentWidth, display.contentHeight, display.contentCenterX, display.contentCenterY
  
    -- BACGROUND --
@@ -28,15 +28,24 @@ function scene:create( event )
 
    sceneGroup:insert( titleGroup )
 
-   local title1 = display.newText( { 
+   local title = display.newText( { 
       parent = titleGroup, 
       text = "The Great Tap!", 
       font = "kenvector_future_thin.ttf", 
       fontSize = 30,
-      align = 'center'} )
+      align = 'center' } )
+
+   local subtitle = display.newText( {
+      parent = titleGroup,
+      y = 50,
+      text = "The greatest tennis game",
+      font = "kenvector_future_thin.ttf", 
+      fontSize = 15,
+      align = 'center' } )
 
    -- Animate the title into place
-   transition.from( title1, {time = 500, delay = 1, y = 400, transition = easing.outExpo} )
+   transition.from( title, {time = 500, delay = 1, y = 1000, transition = easing.outExpo} )
+   transition.from( subtitle, {time = 500, delay = 2000, y = -500, transition = easing.outExpo} )
 
    -- CREDITS --
    -- List students' names
