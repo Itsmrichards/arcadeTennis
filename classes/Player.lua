@@ -18,8 +18,8 @@ function Player:spawn( x, y )
 end
 
 function Player:move( x )
-	self.playerSprite = x - 30
-	self.racketSprite = x
+	self.playerSprite.x = x - 30
+	self.racketSprite.x = x
 end
 
 function Player:swing( )
@@ -27,8 +27,10 @@ function Player:swing( )
 	transition.to( self.racketSprite, {time = 200, delay = 100, rotation = 0} )
 end
 
-function Player:remove( obj )
-	obj = nil
+function Player:remove(  )
+	self.playerSprite:removeSelf( )
+	self.playerSprite = nil
+	self = nil
 end
 
 return Player

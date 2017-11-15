@@ -12,26 +12,23 @@ local Ball = require('classes.Ball')
 -- Commonly used coordinates
 local _W, _H, _CX, _CY = display.contentWidth, display.contentHeight, display.contentCenterX, display.contentCenterY
 
-
 local scene = composer.newScene( )
 
+-- Restart the scene
 function scene:startRound( )
 	ball = Ball:new()
-	ball:spawn( _CX, _CY )
-end
-
-function scene:getBall( )
-	return ball
+	ball:spawn( self, _CX, _CY )
 end
 
 function scene:create( event )
 	local sceneGroup = self.view
 
    	-- Table of court images --
+   		local players = { 'Blue','Red', 'White' }
 		local courts = { 'blue-white', 'green-white', 'red-white', 'tan-blue', 'tan-white' }
-		local background = display.newImage( sceneGroup, 'kenney_sportspack/Courts/' .. courts[1] .. '.png', _CX, _CY)
+		local background = display.newImage( sceneGroup, 'kenney_sportspack/Courts/' .. courts[ event.params.currentLevel ] .. '.png', _CX, _CY)
 		background:scale( .85, .85 )
-
+		
 	-- Walls --
 		local leftWall = display.newRect( sceneGroup, 0, _CY, 10, _H )
 		local rightWall = display.newRect( sceneGroup, _W, _CY, 10, _H )
@@ -61,12 +58,25 @@ function scene:create( event )
 	-- Players -- 
 		player = Player:new()
 		player:spawn( _CX, _H - 20 )
+		player:move(0)
 
 		enemy = Enemy:new()
-		enemy:spawn( _CX, 20 )
+		enemy:spawn( _CX, 20, players[ event.params.currentLevel ], 2)
 
 	-- Start Round
 		scene:startRound()
+
+	local function updatePlayers( )
+		if (ball.sprite ~= nil) then
+			ballLocation = ball:getLocation()
+
+			player:move( ballLocation )
+			enemy:move( ballLocation )
+		end
+	end
+
+	timer.performWithDelay( 10, updatePlayers, -1 )
+
 end
 
 local function swing( )
@@ -79,23 +89,14 @@ end
 
 Runtime:addEventListener( 'tap', swing )
 
-function scene:loser( )
+function scene:roundOver( )
 	local text = display.newText( "You suck", display.contentCenterX, display.contentCenterY - 30, native.systemFontBold, 30 )
 	text.alpha = 0
 	transition.to( text, {time = 1000, alpha = 1, onComplete = function ( )
 		transition.to( text, {time = 1000, alpha = 0} )
 	end} )
 	-- Problem lies here!!!!
-	scene:startRound()
-end
-
-local function updatePlayers( )
-	if (ball:inBounds()) then
-		ballLocation = ball:getLocation()
-
-		player:move( ballLocation )
-		enemy:move( ballLocation )
-	end
+	-- scene:startRound()
 end
 
 function scene:show( event )
@@ -106,7 +107,7 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is still off screen (but is about to come on screen)
  		-- Update the character positions indefinitely
-		timer.performWithDelay( 10, updatePlayers, -1 )
+		-- timer.performWithDelay( 10, updatePlayers, -1 )
 	elseif ( phase == "did" ) then
 
 	end

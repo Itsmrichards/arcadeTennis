@@ -1,8 +1,10 @@
 local physics = require('physics')
 physics.start()
 
+-- Default parameter
 local Ball = { x = display.contentCenterX, y = display.contentCenterY }
 
+-- Default constructor
 function Ball:new( obj )
 	obj = obj or {}
 	setmetatable( obj, self )
@@ -10,76 +12,92 @@ function Ball:new( obj )
 	return obj
 end
 
+-- Change the direction and apply a random speed 
 function Ball:hit( )
-	local dx, dy = self.ballSprite:getLinearVelocity( )
+	local dx, dy = self.sprite:getLinearVelocity( )
 
-	if dy > 0 then
-		self.ballSprite:applyForce( 1, -2 )
-	else
-		self.ballSprite:applyForce( 1, 2 )
+	local hitPower = math.random( 1, 4 ) * 100
+	local hitDirection = math.random( 0, 1 )
+
+	if hitDirection == 0 then
+		hitDirection = -1
 	end
+
+	print('Ball Velocity: ' .. hitPower * hitDirection .. ', ' .. dy )
+	self.sprite:setLinearVelocity( hitPower * hitDirection, dy * -1 )
 end
 
-function onCollision( event )
-	local collider = event.other.tag
+-- Handle the collision
+local function onCollision( event )
+	local other = event.other
 
-	local ball = require('scenes.game'):getBall()
+	local ball = event.target.op
 
 	if ( event.phase == 'began' ) then
 
-		-- print(collider)
-		-- --print(event.target.isHittable)
-		-- print(event.target.isHittable)
+		if ( other.tag == 'enemyRacket' and ball.isHittable ) then
+			-- other.op:swing()
 
-		-- The call for this function isn't passing my instance
-		-- self.isHittable is set to true in spawn
-
-		if ( collider == 'enemyRacket' and self.isHittable ) then
-			ball.hit()
+			-- if ( other.op:tryToHit() ) then
+				ball:hit()
+			-- end
 		
-		elseif ( collider == 'hitBounds' ) then
+		elseif ( other.tag == 'hitBounds' ) then
 			ball.isHittable = true
 		end
 
 	elseif (event.phase == 'ended' ) then
 		
-		if ( collider == 'hitBounds' ) then
+		if ( other.tag == 'hitBounds' ) then
 			ball.isHittable = false
 		
-		elseif ( collider == 'ballGone' ) then
-			ball:remove()
+		elseif ( other.tag == 'ballGone' ) then
 			-- GAME SCENE ROUND OVER
+			ball.scene:roundOver()
+			ball:remove()
 		end
 	end
 end
 
-function Ball:spawn( x, y )
+-- Intialize properties
+function Ball:spawn( scene, x, y )
 	x = x or 0
 	y = y or 0
 
-	self.ballSprite = display.newImage( "kenney_sportspack/PNG/Equipment/ball_tennis1.png", x, y)
-	self.ballSprite:scale( 1.5, 1.5 )
+	self.sprite = display.newImage( "kenney_sportspack/PNG/Equipment/ball_tennis1.png", x, y)
+
+	self.sprite:scale( 1.5, 1.5 )
 	self.isHittable = false
 
-	physics.addBody( self.ballSprite, 'dynamic' )
-	self.ballSprite.isFixedRotation = true
+	self.scene = scene
 
-	self.ballSprite.collision = onCollision
-	self.ballSprite:addEventListener( 'collision', onCollision )
+	physics.addBody( self.sprite, 'dynamic' )
+	self.sprite.isFixedRotation = true
+	self.sprite.op = self
 
-	-- self.ballSprite:applyForce( -.08, -.5)
-	self.ballSprite:applyForce( 1, .5 )
+	self.sprite:addEventListener( 'collision', onCollision )
+
+	if self.sprite ~= nil then
+		self.sprite:applyForce( 1, .5 )
+	end
 end
 
+-- Check if ball is still in play
 function Ball:inBounds( )
-	return self.ballSprite.x < 320 and self.ballSprite.x > 0
+	if self.sprite ~= nil then
+		return self.sprite.x < 320 and self.sprite.x > 0
+	end
 end
 
+-- Get the current location
 function Ball:getLocation(  )
-	return self.ballSprite.x
+	return self.sprite.x
 end
 
+-- Destructor
 function Ball:remove( )
+	self.sprite:removeSelf( )
+	self.sprite = nil
 	self = nil
 end
 

@@ -14,9 +14,9 @@ function scene:create( event )
    -- BACGROUND --
    local background = display.newRect(sceneGroup, 0, 0, 570, 600)
    background.fill = {
-       type = 'gradient',
-       color1 = {255/255, 165/255, 0/255},
-       color2 = {255/255, 232/255, 191/255}
+    type = 'gradient',
+    color1 = {8/255, 158/255, 0/255},
+    color2 = {104/255, 183/255, 95/255}
    }
 
    background.x = _W / 2
@@ -28,14 +28,14 @@ function scene:create( event )
    sceneGroup:insert( titleGroup )
 
    local title = display.newText( { 
-      parent = titleGroup, 
-      text = "Options", 
-      font = "kenvector_future_thin.ttf", 
-      fontSize = 30,
-      align = 'center'} )
+    parent = titleGroup, 
+    text = "Options", 
+    font = "kenvector_future_thin.ttf", 
+    fontSize = 30,
+    align = 'center'} )
 
-	   -- Animate the title into place
-	   transition.from( title, {time = 500, delay = 1, y = 400, transition = easing.outExpo} )
+   -- Animate the title into place
+   transition.from( title, {time = 500, delay = 1, y = 400, transition = easing.outExpo} )
 
    -- FOREGROUND --
    -- local foregroundGroup = display.newGroup( )
@@ -45,21 +45,59 @@ function scene:create( event )
    -- foregroundGroup.x, foregroundGroup.y = _CX, _CY
    -- local foregroundContainer = display.newImage( foregroundGroup, 'uipack_fixed/PNG/grey_panel.png')
 
-
-
    -- BACK BUTTON --
    self.backButton = widget.newButton( {
-     defaultFile = 'uipack_fixed/PNG/blue_boxCheckmark.png',
+     defaultFile = 'uipack_fixed/PNG/green_boxCheckmark.png',
      --overFile = 'uipack_fixed/PNG/blue_button02.png',
      width = 50, height = 50,
      x = 35, y = _H + 5,
      onRelease = function ( )
         composer.gotoScene( 'scenes.menu', {time = 200, effect = 'slideRight', params = {currentLevel = 1}} )
-     end
-     } )
+     end } )
 
-   	sceneGroup:insert( self.backButton )
-         
+    sceneGroup:insert( self.backButton )
+
+  self.leveloneButton = widget.newButton( {
+    defaultFile = 'uipack_fixed/PNG/green_button04.png',
+    overFile = 'uipack_fixed/PNG/green_button05.png',
+    width = 120, height = 60,
+    x = display.contentCenterX, y = display.contentCenterY -10,
+    label = ' Level 1', labelAlign = 'center',
+    font = "kenvector_future_thin.ttf", 
+    labelColor = { default={ 1, 1, 1 }, over={ 1, 1, 1, 0.5 } },
+    onRelease = function ( )
+      composer.gotoScene( 'scenes.game', {time = 200, effect = 'slideRight', params = {currentLevel =1}} )
+    end } )
+  sceneGroup:insert( self.leveloneButton )
+
+
+  self.leveltwoButton = widget.newButton( {
+    defaultFile = 'uipack_fixed/PNG/green_button04.png',
+    overFile = 'uipack_fixed/PNG/green_button05.png',
+    width = 120, height = 60,
+    x = display.contentCenterX, y = display.contentCenterY + 70,
+    label = 'Level 2', labelAlign = 'center',
+    font = "kenvector_future_thin.ttf", 
+    labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
+    onRelease = function ( )
+      composer.gotoScene( 'scenes.game', {time = 200, effect = 'slideRight', params = {currentLevel = 2}} )
+    end
+    } )
+  sceneGroup:insert( self.leveltwoButton )
+
+
+  self.levelthreeButton = widget.newButton( {
+    defaultFile = 'uipack_fixed/PNG/green_button04.png',
+    overFile = 'uipack_fixed/PNG/green_button05.png',
+    width = 120, height = 60,
+    x = display.contentCenterX, y = display.contentCenterY +150,
+    label = 'Level 3', labelAlign = 'center',
+    font = "kenvector_future_thin.ttf", 
+    labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
+    onRelease = function ( )
+      composer.gotoScene( 'scenes.game', {time = 200, effect = 'slideRight', params = {currentLevel = 3}} )
+    end } )
+  sceneGroup:insert( self.levelthreeButton )
 
 end
 
