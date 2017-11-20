@@ -1,4 +1,4 @@
-local Player = { color ='Green' }
+local Player = {}
 
 function Player:new ( obj )
 	obj = obj or {}
@@ -8,28 +8,29 @@ function Player:new ( obj )
 end
 
 function Player:spawn( x, y )
-	x = x or 0
-	y = y or 0
-	self.playerSprite = display.newImage( "kenney_sportspack/PNG/Green/characterGreen (1).png", x, y )
-	self.racketSprite = display.newImage( "kenney_sportspack/PNG/Equipment/racket_metal.png", x + 30, y - 15 )
+	x = x or display.contentCenterX
+	y = y or display.contentHeight - 20
 
-	self.playerSprite:scale( 1.5, 1.5 )
-	self.playerSprite:rotate( 270 )
+	self.playerShape = display.newImage( "kenney_sportspack/PNG/Green/characterGreen (1).png", x, y )
+	self.racketShape = display.newImage( "kenney_sportspack/PNG/Equipment/racket_metal.png", x + 30, y - 15 )
+
+	self.playerShape:scale( 1.5, 1.5 )
+	self.playerShape:rotate( 270 )
 end
 
 function Player:move( x )
-	self.playerSprite.x = x - 30
-	self.racketSprite.x = x
+	self.playerShape.x = x - 30
+	self.racketShape.x = x
 end
 
 function Player:swing( )
-	transition.to( self.racketSprite, {time = 100, rotation = -45} )
-	transition.to( self.racketSprite, {time = 200, delay = 100, rotation = 0} )
+	transition.to( self.racketShape, {time = 100, rotation = -45} )
+	transition.to( self.racketShape, {time = 200, delay = 100, rotation = 0} )
 end
 
 function Player:remove(  )
-	self.playerSprite:removeSelf( )
-	self.playerSprite = nil
+	self.playerShape:removeSelf( )
+	self.playerShape = nil
 	self = nil
 end
 

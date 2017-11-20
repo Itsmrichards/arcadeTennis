@@ -1,8 +1,9 @@
 local physics = require('physics')
-physics.start()
+physics.start( )
+physics.setGravity( 0, 0 )
 
--- Default parameter
-local Ball = { x = display.contentCenterX, y = display.contentCenterY }
+-- Default parameters
+local Ball = { moveSpeedX = 100, moveSpeedY = 100 }
 
 -- Default constructor
 function Ball:new( obj )
@@ -12,92 +13,108 @@ function Ball:new( obj )
 	return obj
 end
 
--- Change the direction and apply a random speed 
-function Ball:hit( )
-	local dx, dy = self.sprite:getLinearVelocity( )
-
-	local hitPower = math.random( 1, 4 ) * 100
-	local hitDirection = math.random( 0, 1 )
-
-	if hitDirection == 0 then
-		hitDirection = -1
-	end
-
-	print('Ball Velocity: ' .. hitPower * hitDirection .. ', ' .. dy )
-	self.sprite:setLinearVelocity( hitPower * hitDirection, dy * -1 )
-end
-
--- Handle the collision
+-- Hand the collision
 local function onCollision( event )
 	local other = event.other
+	local ball = event.target.parentObject
 
-	local ball = event.target.op
-
+	-- Start of collision
 	if ( event.phase == 'began' ) then
 
+		-- Within the enemy's reach
 		if ( other.tag == 'enemyRacket' and ball.isHittable ) then
-			-- other.op:swing()
 
-			-- if ( other.op:tryToHit() ) then
-				ball:hit()
-			-- end
-		
+			-- Swing regardless
+			other.parentObject:swing( )
+
+			-- Calculate hit based on difficulty
+			if ( other.parentObject:isGoingToHit( ) ) then
+
+				-- Continue
+				ball:hit( )
+			else
+
+				-- Human won
+				ball:remove( )
+				ball._scene:roundOver( true )
+			end
+
+		-- Ball went past human
+		elseif ( other.tag == 'ballBounds' ) then
+
+			-- Enemy won
+			ball:remove( )
+			ball._scene:roundOver( false )
+
+		-- Set hit property
 		elseif ( other.tag == 'hitBounds' ) then
 			ball.isHittable = true
 		end
 
-	elseif (event.phase == 'ended' ) then
-		
+	-- End of collision
+	elseif ( event.phase == 'ended' ) then
+
+		-- Set hit property
 		if ( other.tag == 'hitBounds' ) then
 			ball.isHittable = false
-		
-		elseif ( other.tag == 'ballGone' ) then
-			-- GAME SCENE ROUND OVER
-			ball.scene:roundOver()
-			ball:remove()
 		end
 	end
 end
 
--- Intialize properties
+-- Create image and define properties
 function Ball:spawn( scene, x, y )
-	x = x or 0
-	y = y or 0
+	self.shape = display.newImage( "kenney_sportspack/PNG/Equipment/ball_tennis1.png", x, y)
+	self.shape:scale( 1.5, 1.5 )
 
-	self.sprite = display.newImage( "kenney_sportspack/PNG/Equipment/ball_tennis1.png", x, y)
+	physics.addBody( self.shape, 'dynamic' )
+	self.shape.isFixedRotation = true 	-- shape is a square, that looks like a circle
+	self.shape.parentObject = self	-- Used to acess the parent functions
 
-	self.sprite:scale( 1.5, 1.5 )
+	self.shape:addEventListener( 'collision', onCollision )
+
+	-- Link to current scene
+	self._scene = scene
+
+	-- Ball is within hitBounds
 	self.isHittable = false
 
-	self.scene = scene
-
-	physics.addBody( self.sprite, 'dynamic' )
-	self.sprite.isFixedRotation = true
-	self.sprite.op = self
-
-	self.sprite:addEventListener( 'collision', onCollision )
-
-	if self.sprite ~= nil then
-		self.sprite:applyForce( 1, .5 )
-	end
+	-- Start movement
+	self:hit()
 end
 
 -- Check if ball is still in play
-function Ball:inBounds( )
-	if self.sprite ~= nil then
-		return self.sprite.x < 320 and self.sprite.x > 0
-	end
+function Ball:inBounds(  )
+	return self.shape.x < 320 and self.shape.x > 0
 end
 
 -- Get the current location
 function Ball:getLocation(  )
-	return self.sprite.x
+	return self.shape.x
+end
+
+-- Change the direction and apply a random speed 
+function Ball:hit( )
+	local dx, dy = self.shape:getLinearVelocity( )
+
+	-- Start of the round
+	if dy == 0 then
+		--
+		dx = self.moveSpeedX
+		dy = self.moveSpeedY
+
+	-- Hit by a player
+	else
+		dy = dy * -1
+	end
+
+	print('Ball Velocity: '.. dx .. ', ' .. dy )
+	self.shape:setLinearVelocity( dx, dy )
 end
 
 -- Destructor
 function Ball:remove( )
-	self.sprite:removeSelf( )
-	self.sprite = nil
+	self.shape:removeSelf( )
+	self.shape = nil
 	self = nil
 end
 

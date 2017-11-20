@@ -1,4 +1,4 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 composer = require('composer')
-composer.gotoScene( 'scenes.menu', {time = 500, effect = 'fade'} )
+composer.gotoScene( 'scenes.game', {time = 500, effect = 'fade', params = { currentLevel = 1 }} )
