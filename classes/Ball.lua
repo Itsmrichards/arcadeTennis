@@ -111,6 +111,21 @@ function Ball:hit( )
 	self.shape:setLinearVelocity( dx, dy )
 end
 
+function Ball:pause(  )
+	self.shape.alpha = 0.5
+
+	self.oldDX, self.oldDY = self.shape:getLinearVelocity( )
+
+	self.shape:setLinearVelocity( 0, 0 )
+end
+
+function Ball:play(  )
+	self.shape.alpha = 1
+
+	self.shape:setLinearVelocity( self.oldDX, self.oldDY )
+	self.oldDX, self.oldDY = nil
+end
+
 -- Destructor
 function Ball:remove( )
 	self.shape:removeSelf( )

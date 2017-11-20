@@ -13,10 +13,7 @@ function scene:create( event )
 
 	-- BACGROUND --
 	local background = display.newRect(sceneGroup, 0, 0, 570, 600)
-	background.fill = {
-		type = 'gradient',
-		color1 = { 8/255, 158/255, 0/255 },
-		color2 = { 104/255, 183/255, 95/255 } }
+	background:setFillColor( 0.5 )
 
 	background.x = _W / 2
 	background.y = _H / 2
@@ -28,7 +25,7 @@ function scene:create( event )
 
 	local title = display.newText( { 
 		parent = titleGroup, 
-		text = "Options", 
+		text = "Paused", 
 		font = "kenvector_future_thin.ttf", 
 		fontSize = 30,
 		align = 'center'} )
@@ -51,7 +48,7 @@ function scene:create( event )
 		width = 50, height = 50,
 		x = 35, y = _H + 5,
 		onRelease = function ( )
-			composer.gotoScene( 'scenes.menu', {time = 200, effect = 'slideRight', params = {currentLevel = 1}} )
+			composer.gotoScene( 'scenes.game', {time = 200, effect = 'slideRight', params = {currentLevel = 1}} )
 		end } )
 
 	sceneGroup:insert( self.backButton )
@@ -61,7 +58,7 @@ function scene:create( event )
 		overFile = 'uipack_fixed/PNG/green_button05.png',
 		width = 120, height = 60,
 		x = display.contentCenterX, y = display.contentCenterY -10,
-		label = ' Level 1', labelAlign = 'center',
+		label = ' Sound on', labelAlign = 'center',
 		font = "kenvector_future_thin.ttf", 
 		labelColor = { default={ 1, 1, 1 }, over={ 1, 1, 1, 0.5 } },
 		onRelease = function ( )
@@ -96,6 +93,10 @@ function scene:create( event )
 			composer.gotoScene( 'scenes.game', {time = 200, effect = 'slideRight', params = {currentLevel = 3}} )
 		end } )
 	sceneGroup:insert( self.levelthreeButton )
+
+	Runtime:addEventListener( "accelerometer", function (  )
+		composer.gotoScene( 'scenes.game', { time = 500, effect = 'fade' } )
+		end )
 end
 
 function scene:show( event )
@@ -128,7 +129,7 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
-	titleGroup:removeSelf()
+	-- titleGroup:removeSelf()
 end
 
 -- Listener setup

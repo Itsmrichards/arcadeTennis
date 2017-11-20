@@ -28,9 +28,18 @@ function Player:swing( )
 	transition.to( self.racketShape, {time = 200, delay = 100, rotation = 0} )
 end
 
+function Player:setAlpha( alpha )
+	self.playerShape.alpha = alpha
+	self.racketShape.alpha = alpha
+end
+
 function Player:remove(  )
 	self.playerShape:removeSelf( )
 	self.playerShape = nil
+
+	self.racketShape:removeSelf( )
+	self.racketShape = nil
+	
 	self = nil
 end
 

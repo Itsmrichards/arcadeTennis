@@ -98,15 +98,33 @@ function scene:show( event )
 			scene:startRound( )
 		end
 
+		player:setAlpha( 1 )
+		enemy:setAlpha( 1 )
+
 		timer.performWithDelay( 10, updatePlayers, -1 )
 		Runtime:addEventListener( 'tap', swing )
+		Runtime:addEventListener( "accelerometer", function (  )
+			
+			-- if ball then
+			-- 	ball:pause()
+			-- end
+
+			-- player:setAlpha( 0.5 )
+			-- enemy:setAlpha( 0.5 )
+
+			composer.gotoScene( 'scenes.pauseOverlay', { time = 500, effect = 'fade' } )
+		end )
 	end
 end
 
 function scene:startRound( )
 	print('STARTING A NEW ROUND')
 
-	local counter = display.newText( self.view, '3', display.contentCenterX + 5, display.contentCenterY - 20, 'kenvector_future_thin.ttf', 40 )
+	local roundTextBackground = display.newRoundedRect( self.view, display.contentCenterX, display.contentCenterY - 30, 40, 40, 15)
+	roundTextBackground:setFillColor( .5 )
+	roundTextBackground.alpha = 0
+
+	local counter = display.newText( self.view, '3', display.contentCenterX + 5, display.contentCenterY - 30, 'kenvector_future_thin.ttf', 40 )
 	counter.alpha = 0
 
 	local currentIteration = 3
@@ -119,11 +137,14 @@ function scene:startRound( )
 
 			-- Ease the transition
 			transition.fadeIn( counter, { time = 200} )
+			transition.fadeIn( roundTextBackground, { time = 200 } )
 			currentIteration = currentIteration - 1
 			counter.alpha = 0
+			roundTextBackground.alpha = 0
 		else
 			-- Once 0, set invisible
 			counter.alpha = 0
+			roundTextBackground.alpha = 0
 		end
 
 	end, 4 )
@@ -160,9 +181,14 @@ function scene:hide( event )
  
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+
 		if ball then
 			ball:pause()
 		end
+
+		-- Manualy hide player objects to reuse upon re-entry
+		player:setAlpha( 0.5  )
+		enemy:setAlpha( 0.5  )
  
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
