@@ -41,7 +41,7 @@ function Enemy:isGoingToHit(  )
 
 	local attempt = self.difficulty > rand
 
-	print( 'Difficulty: ' .. self.difficulty .. ", Hit Number: " .. rand )
+	print( 'Hit Number: ' .. rand .. ", Difficulty: " .. self.difficulty )
 
 	return attempt
 end

@@ -98,16 +98,25 @@ function Ball:hit( )
 
 	-- Start of the round
 	if dy == 0 then
-		--
-		dx = self.moveSpeedX
+		-- Assign a random speed for serve, eliminates patterning
+		dx = math.random(-100, self.moveSpeedX)
 		dy = self.moveSpeedY
 
 	-- Hit by a player
 	else
+		-- Hit the ball in a random direction
+		dx = math.random(0, 1) 
+		if dx == 0 then
+			dx = self.moveSpeedX * -1
+		else
+			dx = self.moveSpeedX
+		end
+
+		-- Hit the ball in the opposite direction
 		dy = dy * -1
 	end
 
-	print('Ball Velocity: '.. dx .. ', ' .. dy )
+	print('    Ball Velocity: '.. dx .. ', ' .. dy )
 	self.shape:setLinearVelocity( dx, dy )
 end
 
