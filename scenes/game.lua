@@ -1,5 +1,4 @@
 local composer = require('composer')
-local spriteData = require('spriteSheets')
 local timer = require('timer')
 local physics = require('physics')
 
@@ -33,7 +32,8 @@ function scene:create( event )
 
 	-- ENVIROMENT --
 		-- Background --
-		local background = display.newImage( 'kenney_sportspack/Courts/' .. spriteData.getCourt( currentLevel ) .. '.png', _CX, _CY )
+		local courts = {'blue-white', 'green-white', 'red-white', 'tan-blue'}
+		local background = display.newImage( 'kenney_sportspack/Courts/' .. courts[ currentLevel ] .. '.png', _CX, _CY )
 		background:scale( .85, .85 )
 		sceneGroup:insert( background )
 
