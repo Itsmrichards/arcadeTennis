@@ -17,11 +17,6 @@ local playerScore, enemyScore = 0, 0
 
 local scene = composer.newScene( )
 
-
--- Todo: scene:hide and scene:show not working with overlay,
--- 	implement a seperate pause/play methods. Should fix majority of issues.
--- 	Seperately, pausing during countdown continues game into menu
-
 function scene:create( event )
 	local sceneGroup = self.view
 
@@ -124,7 +119,7 @@ function scene:show( event )
 		timer.performWithDelay( 10, updatePlayers, -1 )
 		Runtime:addEventListener( 'tap', swing )
 		Runtime:addEventListener( "accelerometer", function (  )
-			composer.gotoScene( 'scenes.pauseOverlay', { time = 300, effect = 'fade' } )
+			composer.gotoScene( 'scenes.options', { time = 300, effect = 'fade', params = { sceneFrom = self } } )
 		end )
 	end
 end
@@ -196,7 +191,7 @@ function scene:roundOver( win )
 	-- Game over
 	if ( math.abs( playerScore - enemyScore ) > 2 ) then
 		print('GOING TO transition')
-		-- composer.gotoScene( 'scenes.levelTransition', { time = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore } } )
+		-- composer.gotoScene( 'scenes.levelTransition', { time = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
 	else
 		self.playerScoreDisplay.text = playerScore
 		self.enemyScoreDisplay.text = enemyScore

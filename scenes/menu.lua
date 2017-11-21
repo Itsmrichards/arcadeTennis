@@ -17,7 +17,7 @@ function scene:create( event )
 		type = 'gradient',
 		color1 = { 22/255, 110/255, 252/255 },
 		color2 = { 135/255, 181/255, 255/255 } }
-
+		
 	background.x = _W / 2
 	background.y = _H / 2
 
@@ -93,7 +93,7 @@ function scene:create( event )
 		overFile = 'uipack_fixed/PNG/blue_button02.png',
 		width = 130, height = 60,
 		x = _CX, y = _CY + 100,
-		label = ' Levels', labelAlign = 'center',
+		label = ' Options', labelAlign = 'center',
 		font = 'kenvector_future_thin.ttf', fontSize = 20,
 		labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
 		onRelease = function ( )
