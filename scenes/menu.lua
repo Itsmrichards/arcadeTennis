@@ -97,7 +97,7 @@ function scene:create( event )
 		font = 'kenvector_future_thin.ttf', fontSize = 20,
 		labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
 		onRelease = function ( )
-			composer.gotoScene( 'scenes.options', {time = 500, effect = 'slideUp'})
+			composer.gotoScene( 'scenes.options', {time = 500, effect = 'slideUp', params = {} })
 		end } )
 	sceneGroup:insert( self.optionsButton )
 end

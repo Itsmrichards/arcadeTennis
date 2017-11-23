@@ -24,18 +24,16 @@ function scene:create( event )
 
 		-- Menu Background --
 		local menuBackground = display.newRoundedRect(sceneGroup, 0, 0, 250, 350, 12)
+		menuBackground:setFillColor( .9 )
 		menuBackground.strokeWidth = 2
-		menuBackground:setStrokeColor( 0.5 )
+		menuBackground:setStrokeColor( 0.7 )
 		menuBackground.x = _W / 2
 		menuBackground.y = _H / 2 +20
 
 	-- TITLE --
-		local titleGroup = display.newGroup()
-		titleGroup.x, titleGroup.y = _CX, 50
-		sceneGroup:insert( titleGroup )
-
 		local title = display.newText( { 
-			parent = titleGroup, 
+			parent = sceneGroup,
+			x = _CX, y = 50,
 			text = "Options", 
 			font = "kenvector_future_thin.ttf", 
 			fontSize = 30,
@@ -46,25 +44,36 @@ function scene:create( event )
 		self.nameField = native.newTextField( 90, 100, 100, 30 )
 			sceneGroup:insert(self.nameField)
 			self.nameField.align = "center"
-			self.nameField.width = 170
+			self.nameField.font = native.newFont( 'kenvector_future_thin.ttf', 20 )
+			self.nameField:setTextColor( .8 )
+			self.nameField.inputType = 'no-emoji' -- Only allow text
+			self.nameField.width = 150
 			self.nameField.x = _CX + 30
 			self.nameField.y = 120
-			self.nameField:setTextColor( 0, .5, 0 )
-			self.nameField.text = "Player"
+			self.nameField.placeholder = "Player"
+
+			self.nameField:addEventListener( "userInput", function ( event )
+				if event.phase == 'began' then
+					self.nameField.text = '' -- Clear the field upon editing
+				end
+			end )
+
 
 			-- Labels --
+			local nameFieldBackground = display.newRoundedRect( sceneGroup, _CX + 30, 120, 155, 35, 5 )
+			nameFieldBackground:setFillColor( .8 ) -- Acts as a stroke width
+
 			local textFieldLabel = display.newText( { 
-				parent = titleGroup, 
-				text = "Name:", 
+				parent = sceneGroup, 
+				text = "Name", 
 				font = "kenvector_future_thin.ttf", 
 				fontSize = 15,
-				x=-95,
-				y = 70,
+				x = _CX - 90,
+				y = 120,
 				align = 'center'} )
 
 			-- Assign Label Colors --
 		  	textFieldLabel:setFillColor(.5, .5, .5)
-
 
 		-- Sound Control --
  		self.audioSwitch = widget.newSwitch( {
@@ -79,10 +88,10 @@ function scene:create( event )
 			-- Labels --
 			local soundLabel = display.newText( { 
 				parent = sceneGroup, 
-				text = "Sound:", 
+				text = "Sound", 
 				font = "kenvector_future_thin.ttf", 
 				fontSize = 15,
-				x= _CX - 90,
+				x = _CX - 85,
 				y = 170,
 				align = 'center' } )
 
@@ -100,7 +109,7 @@ function scene:create( event )
 				text = "OFF", 
 				font = "kenvector_future_thin.ttf", 
 				fontSize = 10,
-				x = _CX - 85,
+				x = _CX - 95,
 				y = 205,
 				align = 'center' } )
 
@@ -113,12 +122,48 @@ function scene:create( event )
 			sliderCurrentValue = display.newText( sceneGroup, '5', display.contentCenterX + 2, display.contentCenterY + 90, 'kenvector_future_thin.ttf', 20 )
 			sliderCurrentValue:setFillColor(.5, .5, .5)
 
+			local sliderOptions = 
+			{
+				frames = 
+				{
+					{	-- Slider Handle Up
+
+						x = 190,
+           				y = 276,
+			            width = 28,
+			            height = 42
+        			},
+
+        			-- Slider Bar Horizontal
+					{
+						x = 0,
+           				y = 380,
+			            width = 190,
+			            height = 4
+        			},
+
+        			-- Slider End Circles
+					{
+						x = 138,
+           				y = 478,
+			            width = 8,
+			            height = 10
+        			},
+				}
+			}
+
+			local sliderSheet = graphics.newImageSheet( "uipack_fixed/Spritesheet/greySheet.png", sliderOptions )
+
+
 			 self.slider = widget.newSlider( {
+			 	sheet = sliderSheet,
+			 	middleFrame = 2, frameWidth = 5, frameHeight = 5, fillFrame = 2,
+			 	handleFrame = 1, handleWidth = 18, handleHeight = 27,
 		        x = display.contentCenterX,
 		        y = display.contentCenterY +60,
 		        orientation = "horizontal",
 		        height = 200,
-		        value = 50,  -- Start slider at 10% (optional)
+		        value = 50,  -- Start slider at 50% (optional)
 		        listener = function (  )
 		        	if self.slider.value <= 10 then
 		        		self.slider.value = 10
@@ -129,12 +174,12 @@ function scene:create( event )
 			sceneGroup:insert( self.slider )
 
 			-- Labels --
-	  		local difficultyLabel = display.newText( { 
+	  		local sensitivityLabel = display.newText( { 
 				parent = sceneGroup, 
-				text = "Difficulty", 
+				text = "Sensitivity", 
 				font = "kenvector_future_thin.ttf", 
 				fontSize = 15,
-				x = _CX -70,
+				x = _CX - 65,
 				y = 260,
 				align = 'center' } )
 
@@ -157,7 +202,7 @@ function scene:create( event )
 				align = 'center' } )
 
     		-- Assign Label Colors --
-		  	difficultyLabel:setFillColor(.5, .5, .5)
+		  	sensitivityLabel:setFillColor(.5, .5, .5)
 		  	sliderLabelLow:setFillColor(.5, .5, .5)
 	  		sliderLabelHigh:setFillColor(.5, .5, .5)
 
@@ -169,20 +214,27 @@ function scene:create( event )
 			label = '  Accept', labelColor = { default = {1, 1, 1} },
 			font = 'kenvector_future_thin.ttf',
 			width = 150, height = 40,
-			x = 200, y = _H -90,
+			x = 195, y = _H -90,
 			onRelease = function ( )
 
+				-- Set all of the game settings
 				composer.setVariable( 'playerName', self.nameField.text )
 				audio.setVolume( self.audioSwitch.isOn and 1 or 0 )
 				composer.setVariable( 'enemyDifficulty', math.floor (self.slider.value / 10))
 
+				-- Return to the appropriate scene
 				if event.params.sceneFrom then
+					-- In pause menu
 					composer.gotoScene( 'scenes.game', { time = 200, effect = 'slideRight' } )
 				else
+					-- In main menu
 					composer.gotoScene( 'scenes.menu', { time = 200, effect = 'slideRight' } )
 				end
+
 			end } )
 			sceneGroup:insert( acceptButton )
+
+		print( event.params.sceneFrom )
 
 		-- Back Button --
 		self.backButton = widget.newButton( {
@@ -208,6 +260,7 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 
+		-- Fill in fields from memory
 		self.slider.value = composer.getVariable( 'enemyDifficulty' ) * 10
 		self.nameField.text = composer.getVariable( 'playerName' )
 		self.audioSwitch.value = audio.getVolume( ) == 0 and false or true
@@ -229,7 +282,6 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
-	titleGroup:removeSelf()
 end
 
 -- Listener setup
