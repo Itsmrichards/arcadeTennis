@@ -94,7 +94,7 @@ end
 
 -- Change the direction and apply a random speed 
 function Ball:hit( )
-	local ballSound = audio.loadSound( 'sounds/ballHit.mp3' )
+	local ballSound = audio.loadSound( 'sounds/kenney_uiaudio/Audio/rollover6.ogg' )
 	audio.play( ballSound )
 
 

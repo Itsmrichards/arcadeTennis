@@ -135,7 +135,6 @@ function scene:show( event )
 	if ( phase == "will" ) then
 
 	elseif ( phase == "did" ) then
-
 		self.playing = true
 
 		if ball then
@@ -224,8 +223,9 @@ function scene:roundOver( win )
 		print('Transitioning to new level')
 		-- composer.gotoScene( 'scenes.levelTransition', { time = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
 		
+		-- Delay transitions so collisions can finish
 		timer.performWithDelay( 50, function (  )
-			composer.gotoScene( 'scenes.levelTransition', { timer = 300, effect = 'fade', params = { currentLevel = currentLevel + 1 } } )
+			composer.gotoScene( 'scenes.levelTransition', { timer = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
 		end )
 	else
 		self.playerScoreDisplay.text = playerScore

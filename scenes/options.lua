@@ -8,6 +8,9 @@ local textGroup
 function scene:create( event )
 	local sceneGroup = self.view
 
+	local clickSound = audio.loadSound( 'sounds/kenney_uiaudio/Audio/click1.ogg' )
+	local switchSound = audio.loadSound( 'sounds/kenney_uiaudio/Audio/switch1.ogg' )
+
 	-- Commonly used coordinates
 	local _W, _H, _CX, _CY = display.contentWidth, display.contentHeight, display.contentCenterX, display.contentCenterY
 
@@ -81,7 +84,10 @@ function scene:create( event )
 	        top = 190,
 	        style = "onOff",
 	        id = "self.audioSwitch",
-	        initialSwitchState = true } )
+	        initialSwitchState = true,
+	        onPress = function (  )
+	        	audio.play( switchSound )
+	        end } )
 
 			sceneGroup:insert(self.audioSwitch)
 
@@ -127,7 +133,6 @@ function scene:create( event )
 				frames = 
 				{
 					{	-- Slider Handle Up
-
 						x = 190,
            				y = 276,
 			            width = 28,
@@ -154,8 +159,7 @@ function scene:create( event )
 
 			local sliderSheet = graphics.newImageSheet( "uipack_fixed/Spritesheet/greySheet.png", sliderOptions )
 
-
-			 self.slider = widget.newSlider( {
+		 	self.slider = widget.newSlider( {
 			 	sheet = sliderSheet,
 			 	middleFrame = 2, frameWidth = 5, frameHeight = 5, fillFrame = 2,
 			 	handleFrame = 1, handleWidth = 18, handleHeight = 27,
@@ -218,6 +222,8 @@ function scene:create( event )
 			onRelease = function ( )
 				print('Changes accepted')
 
+				audio.play( clickSound )
+
 				-- Set all of the game settings
 				composer.setVariable( 'playerName', self.nameField.text )
 				audio.setVolume( self.audioSwitch.isOn and 1 or 0 )
@@ -242,6 +248,8 @@ function scene:create( event )
 			x = 70, y = _H -90,
 			onRelease = function ( )
 				print('Changes removed')
+
+				audio.play( clickSound )
 				
 				if event.params.sceneFrom then
 					composer.gotoScene( 'scenes.game', { time = 200, effect = 'slideRight' } )

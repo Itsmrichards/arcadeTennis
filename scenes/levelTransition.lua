@@ -19,9 +19,7 @@ function scene:create( event )
  
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
-	composer.removeScene( 'scenes.game' )
-	composer.gotoScene( 'scenes.game', { time = 300, effect = 'fade', params = { currentLevel = event.params.currentLevel } } )
- 
+
 end
  
  
@@ -33,10 +31,22 @@ function scene:show( event )
  
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is still off screen (but is about to come on screen)
- 
+ 	
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
- 
+	 	composer.removeScene( 'scenes.game' )
+
+	 	if event.params.currentLevel < 3 then
+			print( event.params.playerWon )
+			if event.params.playerWon then
+				composer.gotoScene( 'scenes.game', { time = 300, effect = 'fade', params = { currentLevel = event.params.currentLevel } } )
+		 	else
+		 		-- composer.removeHidden( )
+		 		composer.gotoScene( 'scenes.menu', { time = 300, effect = 'fade'} )
+			end
+		else
+			composer.gotoScene( 'scenes.victoryScreen' { time = 300, effect = 'fade'} )
+
 	end
 end
  

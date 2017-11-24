@@ -11,6 +11,9 @@ function scene:create( event )
 	-- Commonly used coordinates
 	local _W, _H, _CX, _CY = display.contentWidth, display.contentHeight, display.contentCenterX, display.contentCenterY
 
+	-- Load Audio --
+	local clickSound = audio.loadSound( 'sounds/kenney_uiaudio/Audio/click1.ogg' )
+
 	-- BACGROUND --
 	local background = display.newRect(sceneGroup, 0, 0, 570, 600)
 	background.fill = {
@@ -80,6 +83,7 @@ function scene:create( event )
 		font = 'kenvector_future_thin.ttf', fontSize = 20,
 		labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
 		onRelease = function ( )
+			audio.play( clickSound )
 			composer.gotoScene( 'scenes.game', {time = 200, effect = 'slideRight', params = {currentLevel = 1}} )
 		end } )
 	sceneGroup:insert( self.playButton )
@@ -97,6 +101,7 @@ function scene:create( event )
 		font = 'kenvector_future_thin.ttf', fontSize = 20,
 		labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
 		onRelease = function ( )
+			audio.play( clickSound )
 			composer.gotoScene( 'scenes.options', {time = 500, effect = 'slideUp', params = {} })
 		end } )
 	sceneGroup:insert( self.optionsButton )
