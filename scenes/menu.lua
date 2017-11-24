@@ -60,7 +60,7 @@ function scene:create( event )
 	local creditText = display.newText( {
 		parent = titleGroup,
 		parent = sceneGroup,  
-		text = "Jake Clough\nMartin Richards\nChandler Davidson",
+		text = "Jake Clough\nMartin Richards\nChandler Davidson\nAssets: Kenney.nl",
 		x = 95, y = _H + 10, 
 		font = "kenvector_future_thin.ttf", 
 		fontSize = 15 } )

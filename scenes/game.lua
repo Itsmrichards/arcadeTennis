@@ -190,8 +190,9 @@ function scene:roundOver( win )
 
 	-- Game over
 	if ( math.abs( playerScore - enemyScore ) > 2 ) then
-		print('GOING TO transition')
+		print('Transitioning to new level')
 		-- composer.gotoScene( 'scenes.levelTransition', { time = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
+		-- composer.gotoScene( 'scenes.game' { timer = 300, effect = 'fade', params = { currentLevel = currentLevel + 1}} )
 	else
 		self.playerScoreDisplay.text = playerScore
 		self.enemyScoreDisplay.text = enemyScore

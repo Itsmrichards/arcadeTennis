@@ -1,4 +1,4 @@
-local composer = require('composer')
+composer = require('composer')
 local scene = composer.newScene()
 local widget = require('widget')
 
@@ -118,7 +118,7 @@ function scene:create( event )
 		  	soundOnLabel:setFillColor(.5, .5, .5)
 		  	soundOffLabel:setFillColor(.5, .5, .5)
 
-		-- Difficulty Slider --
+		-- Sensitivity Slider --
 			sliderCurrentValue = display.newText( sceneGroup, '5', display.contentCenterX + 2, display.contentCenterY + 90, 'kenvector_future_thin.ttf', 20 )
 			sliderCurrentValue:setFillColor(.5, .5, .5)
 
@@ -216,11 +216,12 @@ function scene:create( event )
 			width = 150, height = 40,
 			x = 195, y = _H -90,
 			onRelease = function ( )
+				print('Changes accepted')
 
 				-- Set all of the game settings
 				composer.setVariable( 'playerName', self.nameField.text )
 				audio.setVolume( self.audioSwitch.isOn and 1 or 0 )
-				composer.setVariable( 'enemyDifficulty', math.floor (self.slider.value / 10))
+				composer.setVariable( 'playerSensitivity', math.floor (self.slider.value / 10))
 
 				-- Return to the appropriate scene
 				if event.params.sceneFrom then
@@ -234,14 +235,14 @@ function scene:create( event )
 			end } )
 			sceneGroup:insert( acceptButton )
 
-		print( event.params.sceneFrom )
-
 		-- Back Button --
 		self.backButton = widget.newButton( {
 			defaultFile = 'uipack_fixed/PNG/green_boxCross.png',
 			width = 40, height = 40,
 			x = 70, y = _H -90,
 			onRelease = function ( )
+				print('Changes removed')
+				
 				if event.params.sceneFrom then
 					composer.gotoScene( 'scenes.game', { time = 200, effect = 'slideRight' } )
 				else
@@ -261,7 +262,7 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 
 		-- Fill in fields from memory
-		self.slider.value = composer.getVariable( 'enemyDifficulty' ) * 10
+		self.slider.value = composer.getVariable( 'playerSensitivity' ) * 10
 		self.nameField.text = composer.getVariable( 'playerName' )
 		self.audioSwitch.value = audio.getVolume( ) == 0 and false or true
 	
