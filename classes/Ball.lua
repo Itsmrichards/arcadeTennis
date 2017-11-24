@@ -94,6 +94,10 @@ end
 
 -- Change the direction and apply a random speed 
 function Ball:hit( )
+	local ballSound = audio.loadSound( 'sounds/ballHit.mp3' )
+	audio.play( ballSound )
+
+
 	local dx, dy = self.shape:getLinearVelocity( )
 
 	-- Start of the round
