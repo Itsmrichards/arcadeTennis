@@ -55,6 +55,11 @@ function scene:create( event )
 		ballBounds.tag = 'ballBounds'
 		physics.addBody( ballBounds, "static", { isSensor=true } )
 
+		-- Bar to control player's movement
+		self.controlBar = display.newRect( sceneGroup, _CX, _H - 20, _W, 100 )
+		self.controlBar:setFillColor( 1, 1, 1, 0.5 )
+		transition.to( self.controlBar, { time = 1000, alpha = 0.01 } )
+
 		-- Score Displays --
 		local levelDisplay = display.newText( sceneGroup, 'Level ' .. currentLevel, 130, _H + 5, 'kenvector_future_thin.ttf', 25 )
 		self.playerScoreDisplay = display.newText( sceneGroup, 0, _W - 43, _H, 'kenvector_future_thin.ttf', 30 )
@@ -77,15 +82,41 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 
-	-- Update player's position with the ball
+	-- Update enemy's position with the ball
 	local function updatePlayers(  )
 		if ball then
-			ballLocation = ball:getLocation( )
-
-			player:move( ballLocation )
-			enemy:move( ballLocation )
+			-- player:move( ball:getLocation() )
+			enemy:move( ball:getLocation() )
 		end
 	end
+
+	-- Move the player's position
+	local function move( event )
+
+	-- Add dramatic movement towards outside
+		if player.playerShape then
+			if event.phase == "began" then		
+				player.markX = player.playerShape.x
+			elseif event.phase == "moved" then	 	
+				local x = (event.x - event.xStart) + player.markX	 	
+
+				if (x <= 20 + player.playerShape.width/2) then
+					player.playerShape.x = 20+player.playerShape.width/2;
+					player.racketShape.x = 50+player.racketShape.width/2
+
+				elseif (x >= display.contentWidth-20-player.playerShape.width/2) then
+					player.playerShape.x = display.contentWidth-20-player.playerShape.width/2;
+					player.racketShape.x = display.contentWidth+10-player.racketShape.width/2;
+
+				else
+					player.playerShape.x = x;	
+					player.racketShape.x = x + 30	
+				end
+			end
+		end
+	end
+
+	self.controlBar:addEventListener( 'touch', move )
 
 	-- Swing the player's racket
 	local function swing(  )
@@ -189,10 +220,13 @@ function scene:roundOver( win )
 	end } )
 
 	-- Game over
-	if ( math.abs( playerScore - enemyScore ) > 2 ) then
+	if ( math.abs( playerScore - enemyScore ) > 0 ) then
 		print('Transitioning to new level')
 		-- composer.gotoScene( 'scenes.levelTransition', { time = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
-		-- composer.gotoScene( 'scenes.game' { timer = 300, effect = 'fade', params = { currentLevel = currentLevel + 1}} )
+		
+		timer.performWithDelay( 50, function (  )
+			composer.gotoScene( 'scenes.levelTransition', { timer = 300, effect = 'fade', params = { currentLevel = currentLevel + 1 } } )
+		end )
 	else
 		self.playerScoreDisplay.text = playerScore
 		self.enemyScoreDisplay.text = enemyScore
