@@ -22,6 +22,8 @@ function scene:create( event )
 
 	currentLevel = event.params.currentLevel
 
+	print( 'Starting Level: ' .. currentLevel )
+
 	-- Commonly used coordinates
 	local _W, _H, _CX, _CY = display.contentWidth, display.contentHeight, display.contentCenterX, display.contentCenterY
 
@@ -204,14 +206,14 @@ function scene:roundOver( win )
 
 	-- Win == player won
 	if win then
-		string = 'You won'
+		string = composer.getVariable( 'playerName' ) .. ' WON'
 		playerScore = playerScore + 1
 	else
-		string = 'You lost'
+		string = 'CPU WON'
 		enemyScore = enemyScore + 1
 	end
 
-	local roundText = display.newText( string, display.contentCenterX, display.contentCenterY + 20, native.systemFontBold, 30 )
+	local roundText = display.newText( string, display.contentCenterX, display.contentCenterY + 20, native.systemFontBold, 20 )
 	roundText.alpha = 0
 
 	transition.to( roundText, {time = 1000, alpha = 1, onComplete = function ( )
@@ -219,13 +221,13 @@ function scene:roundOver( win )
 	end } )
 
 	-- Game over
-	if ( math.abs( playerScore - enemyScore ) > 0 ) then
+	if ( math.abs( playerScore - enemyScore ) > 2 ) then
 		print('Transitioning to new level')
 		-- composer.gotoScene( 'scenes.levelTransition', { time = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
 		
 		-- Delay transitions so collisions can finish
 		timer.performWithDelay( 50, function (  )
-			composer.gotoScene( 'scenes.levelTransition', { timer = 300, effect = 'fade', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
+			composer.gotoScene( 'scenes.levelTransition', { timer = 300, effect = 'slideRight', params = { playerWon = playerScore > enemyScore, currentLevel = currentLevel + 1 } } )
 		end )
 	else
 		self.playerScoreDisplay.text = playerScore

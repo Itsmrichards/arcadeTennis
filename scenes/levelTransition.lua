@@ -36,16 +36,16 @@ function scene:show( event )
 		-- Code here runs when the scene is entirely on screen
 	 	composer.removeScene( 'scenes.game' )
 
-	 	if event.params.currentLevel < 3 then
+	 	if event.params.currentLevel <= 3 then
 			print( event.params.playerWon )
 			if event.params.playerWon then
-				composer.gotoScene( 'scenes.game', { time = 300, effect = 'fade', params = { currentLevel = event.params.currentLevel } } )
+				composer.gotoScene( 'scenes.game', { params = { currentLevel = event.params.currentLevel } } )
 		 	else
-		 		-- composer.removeHidden( )
 		 		composer.gotoScene( 'scenes.menu', { time = 300, effect = 'fade'} )
 			end
 		else
-			composer.gotoScene( 'scenes.victoryScreen' { time = 300, effect = 'fade'} )
+			composer.gotoScene( 'scenes.victoryScreen', { time = 300, effect = 'fade'} )
+		end
 
 	end
 end

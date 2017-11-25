@@ -80,7 +80,7 @@ function scene:create( event )
 
 		-- Sound Control --
  		self.audioSwitch = widget.newSwitch( {
-	        left = _CX -70,
+	        left = _CX - 70,
 	        top = 190,
 	        style = "onOff",
 	        id = "self.audioSwitch",
@@ -225,7 +225,7 @@ function scene:create( event )
 				audio.play( clickSound )
 
 				-- Set all of the game settings
-				composer.setVariable( 'playerName', self.nameField.text )
+				composer.setVariable( 'playerName', string.upper( self.nameField.text ) )
 				audio.setVolume( self.audioSwitch.isOn and 1 or 0 )
 				composer.setVariable( 'playerSensitivity', math.floor (self.slider.value / 10))
 

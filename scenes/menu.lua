@@ -64,7 +64,7 @@ function scene:create( event )
 		parent = titleGroup,
 		parent = sceneGroup,  
 		text = "Jake Clough\nMartin Richards\nChandler Davidson\nAssets: Kenney.nl",
-		x = 95, y = _H + 10, 
+		x = 95, y = _H, 
 		font = "kenvector_future_thin.ttf", 
 		fontSize = 15 } )
 

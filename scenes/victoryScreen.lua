@@ -43,6 +43,15 @@ function scene:create( event )
 		fontSize = 30,
 		align = 'center'} )
 
+	-- List students' names
+	local creditText = display.newText( {
+		parent = titleGroup,
+		parent = sceneGroup,  
+		text = "Jake Clough\nMartin Richards\nChandler Davidson\nAssets: Kenney.nl",
+		x = 95, y = _H, 
+		font = "kenvector_future_thin.ttf", 
+		fontSize = 15 } )
+
 	-- PLAY BUTTON --
 	-- Start the game, using a smooth transition
 	self.playButton = widget.newButton( {
