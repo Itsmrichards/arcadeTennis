@@ -126,11 +126,18 @@ function scene:show( event )
 			dx, dy = ball.shape:getLinearVelocity( )
 
 			-- Ball is in play and in right direction
-			if ( ball and ball:inBounds() and ball.isHittable and dy > 0 ) then
-				ball:hit()
+			if ( ball:inBounds() and ball.isHittable and dy > 0 ) then
+
+				-- Ball has to hit the player's racket
+				local racket = player.racketShape
+				if ball.shape.x >= racket.x - racket.width / 2 and ball.shape.x <= racket.x + racket.width then
+					ball:hit()
+				end
+
 			end
 		end
 
+		-- Swing racekt regardless
 		player:swing( )
 	end
  
