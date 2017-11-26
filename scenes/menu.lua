@@ -32,7 +32,7 @@ function scene:create( event )
 
 	local title = display.newText( { 
 		parent = titleGroup, 
-		text = "The Great Tap!", 
+		text = "Arcade Tennis!", 
 		font = "kenvector_future_thin.ttf", 
 		fontSize = 30,
 		align = 'center' } )

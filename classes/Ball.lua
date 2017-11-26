@@ -33,9 +33,7 @@ local function onCollision( event )
 				-- Continue
 				ball:hit( )
 			else
-
 				-- Human won
-				ball:remove( )
 				ball._scene:roundOver( true )
 			end
 
@@ -94,7 +92,7 @@ end
 
 -- Change the direction and apply a random speed 
 function Ball:hit( )
-	local ballSound = audio.loadSound( 'sounds/kenney_uiaudio/Audio/rollover6.ogg' )
+	local ballSound = audio.loadSound( 'sounds/kenney_uiaudio/Audio/rollover2.ogg' )
 	audio.play( ballSound )
 
 
