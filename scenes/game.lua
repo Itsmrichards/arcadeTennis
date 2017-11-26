@@ -11,6 +11,7 @@ local player
 local enemy
 local ball
 
+-- Number used to determine sprite colors and difficulty
 local currentLevel
 
 local playerScore, enemyScore = 0, 0
@@ -95,7 +96,7 @@ function scene:show( event )
 	-- Move the player's position
 	local function move( event )
 
-	-- Add dramatic movement towards outside
+	-- Drag movement for player control
 		if player.playerShape then
 			if event.phase == "began" then		
 				player.markX = player.playerShape.x
@@ -118,8 +119,6 @@ function scene:show( event )
 		end
 	end
 
-	self.controlBar:addEventListener( 'touch', move )
-
 	-- Swing the player's racket
 	local function swing(  )
 		if ball then
@@ -137,13 +136,15 @@ function scene:show( event )
 			end
 		end
 
-		-- Swing racekt regardless
+		-- Swing racket regardless
 		player:swing( )
 	end
  
 	if ( phase == "will" ) then
 
 	elseif ( phase == "did" ) then
+
+		-- Resume play
 		self.playing = true
 
 		if ball then
@@ -157,6 +158,7 @@ function scene:show( event )
 
 		timer.performWithDelay( 10, updatePlayers, -1 )
 		Runtime:addEventListener( 'tap', swing )
+		self.controlBar:addEventListener( 'touch', move )
 		Runtime:addEventListener( "accelerometer", function (  )
 			composer.gotoScene( 'scenes.options', { time = 300, effect = 'fade', params = { sceneFrom = self } } )
 		end )
@@ -269,6 +271,7 @@ end
 function scene:destroy( event )
 	local sceneGroup = self.view
 
+	-- Remove scene objects
 	player:remove()
 	enemy:remove()
 

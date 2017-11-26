@@ -11,7 +11,7 @@ function scene:create( event )
 	-- Commonly used coordinates
 	local _W, _H, _CX, _CY = display.contentWidth, display.contentHeight, display.contentCenterX, display.contentCenterY
 
-	-- BACGROUND --
+	-- BACKGROUND --
 	local background = display.newRect(sceneGroup, 0, 0, 570, 600)
 	background:setFillColor( 0.5 )
 

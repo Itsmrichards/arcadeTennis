@@ -8,6 +8,7 @@ function Player:new ( obj )
 end
 
 function Player:spawn( x, y )
+	-- Constructor
 	x = x or display.contentCenterX
 	y = y or display.contentHeight - 20
 
@@ -19,21 +20,25 @@ function Player:spawn( x, y )
 end
 
 function Player:move( x )
+	-- Legacy code from old play style
 	self.playerShape.x = x - 30
 	self.racketShape.x = x
 end
 
 function Player:swing( )
+	-- Animate player's racket
 	transition.to( self.racketShape, {time = 100, rotation = -45} )
 	transition.to( self.racketShape, {time = 200, delay = 100, rotation = 0} )
 end
 
 function Player:setAlpha( alpha )
+	-- Adjust the alpha of both sprites
 	self.playerShape.alpha = alpha
 	self.racketShape.alpha = alpha
 end
 
 function Player:remove(  )
+	-- Common destructor
 	self.playerShape:removeSelf( )
 	self.playerShape = nil
 
