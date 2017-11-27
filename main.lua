@@ -1,17 +1,11 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 composer = require('composer')
-composer.gotoScene( 'scenes.game', {time = 500, effect = 'fade'} )
 
--- Player = require('classes.Player')
--- Enemy = require('classes.Enemy')
--- Ball = require('classes.Ball')
+-- Define initial game settings as globals --
+composer.setVariable( 'playerName', 'PLAYER' )
+composer.setVariable( 'playerSensitivity', 5 )
+audio.setVolume( 1 )
 
--- a = Player:new()
--- a:spawn(display.contentCenterX, display.contentCenterY)
-
--- b = Enemy:new()
--- b:spawn(display.contentCenterX, 30)
-
--- c = Ball:new()
--- c = Ball:spawn()
+-- Start the game
+composer.gotoScene( 'scenes.menu', { time = 500, effect = 'fade'} )

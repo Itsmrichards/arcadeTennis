@@ -1,40 +1,49 @@
 local physics = require('physics')
-physics.start()
 local Player = require('classes.Player')
 
-local Enemy = Player:new()
+local Enemy = Player:new( { difficulty = 7 } )
 
-function swing ( )
-	transition.to( racketSprite, {time = 100, rotation = 135} )
-	transition.to( racketSprite, {time = 200, delay = 100, rotation = 180} )
+local colors = { 'Blue', 'Red', 'White' }
+
+-- Constructs a new enemy object
+function Enemy:spawn( x, y, level )
+	-- Define sprites
+	self.playerShape = display.newImage( "kenney_sportspack/PNG/" .. colors[level] .. "/character" .. colors[level] .. " (1).png", x, y )
+	self.racketShape = display.newImage( "kenney_sportspack/PNG/Equipment/racket_metal.png", x - 30, y + 15 )
+
+	-- Adjust body sprite
+	self.playerShape:scale( 1.5, 1.5 )
+	self.playerShape:rotate( 90 )
+	self.playerShape.tag = 'enemy'
+
+	-- Adjust racket sprite
+	self.racketShape:rotate( 180 )
+	self.racketShape.tag = 'enemyRacket'
+
+	-- Attach physics used for collision
+	physics.addBody( self.racketShape, "static", { isSensor=true } )
+	self.racketShape.parentObject = self
 end
 
-function onCollision( )
-	--local isGoingToHit = math.random( difficulty )
-	local isGoingToHit = 1 -- For testing, always hit
-
-	-- Basic AI
-	if isGoingToHit == 1 then
-		--ball.hit()
-		swing()
-	end
+-- Swing animation
+function Enemy:swing ( )
+	transition.to( racketShape, {time = 100, rotation = 135} )
+	transition.to( racketShape, {time = 200, delay = 100, rotation = 180} )
 end
 
-function Enemy:spawn( x, y, color )
-	color = color or 'Blue'
-	self.playerSprite = display.newImage( "kenney_sportspack/PNG/" .. color .. "/character" .. color .. " (1).png", x, y )
-	self.racketSprite = display.newImage( "kenney_sportspack/PNG/Equipment/racket_metal.png", x - 30, y + 15 )
+function Enemy:move( x )
+	self.playerShape.x = x + 30
+	self.racketShape.x = x
+end
 
-	self.playerSprite:scale( 1.5, 1.5 )
-	self.playerSprite:rotate( 90 )
-	self.playerSprite.tag = 'enemy'
+function Enemy:isGoingToHit(  )
+	rand = math.random( 0, 10 )
 
-	self.racketSprite:rotate( 180 )
-	self.racketSprite.tag = 'enemyRacket'
+	local attempt = self.difficulty > rand
 
-	physics.addBody( self.racketSprite, "static", { isSensor=true } )
-	self.racketSprite.collision = onCollision
-	self.racketSprite:addEventListener( "collision" )
+	print( 'Hit Number: ' .. rand .. ", Difficulty: " .. self.difficulty )
+
+	return attempt
 end
 
 return Enemy
